@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shopping Cart</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body>
+
+    <h1 class="text-3xl font-bold text-center bg-dark text-gray-800 mb-6 p-6">TeddyStore</h1>
+
+    <div class="max-w-7xl mx-auto p-6 bg-gray-100 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <% items.forEach(item => { %>
+            <div class="max-w-4xl mx-auto p-6 bg-white shadow-lg rounded-lg mt-8">
+                <div class="mb-4">
+                    <img src="<%= item.imageUrl %>" alt="<%= item.name %>" class="rounded-lg">
+                </div>
+                <h3 class="text-2xl text-gray-700"><%= item.name %></h3>
+                <p class="text-xl text-gray-500">Price: €<%= item.price %></p>
+
+                <script>
+                    $(document).ready(function () {
+                        $('.quantity-input').on('change', function () {
+                            const itemName = $(this).data('name');
+                            const newQuantity = parseInt($(this).val(), 10);
+                            // Update the quantity locally in the items array
+                            const itemIndex = items.findIndex(item => item.name === itemName);
+                            if (itemIndex >= 0) {
+                                items[itemIndex].quantity = newQuantity;
+                            }
+                            console.log(items);
+                        });
+                    });
+                </script>
+                
+                <form action="/checkout" method="post" class="flex justify-center mt-6">
+                    <input type="hidden" name="name" value="<%= item.name %>">
+                    <input type="hidden" name="price" value="<%= item.price %>">
+                    <input type="number" name="quantity" id="quantity" min="1" value="<%= item.quantity %>" class="ml-2 w-16 border-gray-300">
+                    <input type="submit" value="Add to Cart" class="bg-blue-500 text-white px-6 py-3 rounded-lg shadow-md hover:bg-blue-600 transition duration-300 cursor-pointer">
+                </form>
+                
+            </div>
+        <% }) %>
+    </div>
+
+    <div class="max-w-7xl mx-auto p-6 bg-gray-100 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 cart">
+        <h1></h1>
+    </div>
+</body>
+</html>
